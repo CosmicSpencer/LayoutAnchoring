@@ -32,6 +32,12 @@ public extension UIView {
 		self.init(frame: screen.bounds)
 	}
 
+	convenience init(_ sized: CGSize) {
+		self.init(frame: CGRect(x: 0, y: 0,
+								width: sized.width,
+								height: sized.height))
+	}
+
 	func setLayerSettings(_ settings: LayerSettings) {
 		layer.borderColor = settings.borderColor
 		layer.borderWidth = settings.borderWidth
@@ -67,96 +73,224 @@ public extension LayoutAnchoring {
 	var centerY: NSLayoutYAxisAnchor { return centerYAnchor }
 	
 	
-	func top(to anchor: NSLayoutYAxisAnchor) -> NSLayoutConstraint {
-		return top.constraint(equalTo: anchor)
+    @discardableResult func top(to anchor: NSLayoutYAxisAnchor,
+                                constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+        let c = top.constraint(equalTo: anchor, constant: constant)
+		c.isActive = true
+		return c
 	}
 	
-	func top(to other: LayoutAnchoring) -> NSLayoutConstraint {
-		return top(to: other.top)
+    @discardableResult func top(to other: LayoutAnchoring,
+                                constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+		return top(to: other.top, constant: constant)
 	}
 	
-	func leading(to other: NSLayoutXAxisAnchor) -> NSLayoutConstraint {
-		return leading.constraint(equalTo: other)
+    @discardableResult func leading(to other: NSLayoutXAxisAnchor,
+                                    constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+		let c = leading.constraint(equalTo: other, constant: constant)
+		c.isActive = true
+		return c
 	}
 	
-	func leading(to other: LayoutAnchoring) -> NSLayoutConstraint {
-		return leading(to: other.leading)
+    @discardableResult func leading(to other: LayoutAnchoring,
+                                    constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+        return leading(to: other.leading, constant: constant)
 	}
 	
-	func left(to other: NSLayoutXAxisAnchor) -> NSLayoutConstraint {
-		return left.constraint(equalTo: other)
+    @discardableResult func left(to other: NSLayoutXAxisAnchor,
+                                 constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+		let c = left.constraint(equalTo: other, constant: constant)
+		c.isActive = true
+		return c
 	}
 	
-	func left(to other: LayoutAnchoring) -> NSLayoutConstraint {
-		return left(to: other.left)
+    @discardableResult func left(to other: LayoutAnchoring,
+                                 constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+        return left(to: other.left, constant: constant)
 	}
 	
-	func bottom(to other: NSLayoutYAxisAnchor) -> NSLayoutConstraint {
-		return bottom.constraint(equalTo: other)
+    @discardableResult func bottom(to other: NSLayoutYAxisAnchor,
+                                   constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+		let c = bottom.constraint(equalTo: other, constant: constant)
+		c.isActive = true
+		return c
 	}
 	
-	func bottom(to other: LayoutAnchoring) -> NSLayoutConstraint {
-		return bottom(to: other.bottom)
+    @discardableResult func bottom(to other: LayoutAnchoring,
+                                   constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+        return bottom(to: other.bottom, constant: constant)
 	}
 	
-	func right(to other: NSLayoutXAxisAnchor) -> NSLayoutConstraint {
-		return right.constraint(equalTo: right)
+    @discardableResult func right(to other: NSLayoutXAxisAnchor,
+                                  constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+        let c = right.constraint(equalTo: right, constant: constant)
+		c.isActive = true
+		return c
 	}
 	
-	func right(to other: LayoutAnchoring) -> NSLayoutConstraint {
-		return right(to: other.right)
+    @discardableResult func right(to other: LayoutAnchoring,
+                                  constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+        return right(to: other.right, constant: constant)
 	}
 	
-	func trailing(to other: NSLayoutXAxisAnchor) -> NSLayoutConstraint {
-		return trailing.constraint(equalTo: other)
+    @discardableResult func trailing(to other: NSLayoutXAxisAnchor,
+                                     constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+		let c = trailing.constraint(equalTo: other, constant: constant)
+		c.isActive = true
+		return c
 	}
 	
-	func trailing(to other: LayoutAnchoring) -> NSLayoutConstraint {
-		return trailing(to: other.trailing)
+    @discardableResult func trailing(to other: LayoutAnchoring,
+                                     constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+		return trailing(to: other.trailing, constant: constant)
 	}
 	
-	func topLeading(to other: LayoutAnchoring) -> [NSLayoutConstraint] {
-		return [top(to: other), leading(to: other)]
+	@discardableResult func topLeading(to other: LayoutAnchoring,
+                                       inset: UIEdgeInsets = .zero)
+        -> [NSLayoutConstraint]
+    {
+		return [top(to: other, constant: inset.top), leading(to: other, constant: inset.left)]
 	}
 	
-	func topTrailing(to other: LayoutAnchoring) -> [NSLayoutConstraint] {
-		return [top(to: other), trailing(to: other)]
+	@discardableResult func topTrailing(to other: LayoutAnchoring,
+                                        inset: UIEdgeInsets = .zero)
+        -> [NSLayoutConstraint]
+    {
+        return [top(to: other, constant: inset.top), trailing(to: other, constant: inset.right)]
 	}
 	
-	func bottomLeading(to other: LayoutAnchoring) -> [NSLayoutConstraint] {
-		return [bottom(to: other), leading(to: other)]
+	@discardableResult func bottomLeading(to other: LayoutAnchoring,
+                                          inset: UIEdgeInsets = .zero)
+        -> [NSLayoutConstraint]
+    {
+        return [bottom(to: other, constant: inset.bottom), leading(to: other, constant: inset.left)]
 	}
 	
-	func bottomTrailing(to other: LayoutAnchoring) -> [NSLayoutConstraint] {
-		return [bottom(to: other), trailing(to: other)]
+	@discardableResult func bottomTrailing(to other: LayoutAnchoring,
+                                           inset: UIEdgeInsets = .zero)
+        -> [NSLayoutConstraint]
+    {
+        return [bottom(to: other, constant: inset.bottom), trailing(to: other, constant: inset.right)]
 	}
 	
-	func fit(to other: LayoutAnchoring) -> [NSLayoutConstraint] {
-		return topLeading(to: other) + bottomTrailing(to: other)
+	@discardableResult func topBottom(to other: LayoutAnchoring,
+									  inset: UIEdgeInsets = .zero)
+		-> [NSLayoutConstraint]
+	{
+		return [top(to: other, constant: inset.top), bottom(to: other, constant: inset.bottom)]
+	}
+
+	@discardableResult func leadingTrailing(to other: LayoutAnchoring,
+									  inset: UIEdgeInsets = .zero)
+		-> [NSLayoutConstraint]
+	{
+		return [leading(to: other, constant: inset.top), trailing(to: other, constant: inset.bottom)]
+	}
+
+    @discardableResult func fit(to other: LayoutAnchoring,
+                                inset: UIEdgeInsets = .zero)
+        -> [NSLayoutConstraint]
+    {
+        return topLeading(to: other, inset: inset) + bottomTrailing(to: other, inset: inset)
 	}
 	
-	func width(to other: LayoutAnchoring) -> NSLayoutConstraint {
-		return widthAnchor.constraint(equalTo: other.widthAnchor)
+    @discardableResult func width(to other: LayoutAnchoring,
+                                  multiplier: CGFloat = 1,
+                                  constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+        let c = widthAnchor.constraint(equalTo: other.widthAnchor,
+                                       multiplier: multiplier,
+                                       constant: constant)
+		c.isActive = true
+		return c
 	}
 	
-	func height(to other: LayoutAnchoring) -> NSLayoutConstraint {
-		return heightAnchor.constraint(equalTo: other.heightAnchor)
+	@discardableResult func width(_ constant: CGFloat) -> NSLayoutConstraint {
+		let c = widthAnchor.constraint(equalToConstant: constant)
+		c.isActive = true
+		return c
 	}
 	
-	func size(to other: LayoutAnchoring) -> [NSLayoutConstraint] {
+	@discardableResult func height(to other: LayoutAnchoring,
+                                   multiplier: CGFloat = 1,
+                                   constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+        let c = heightAnchor.constraint(equalTo: other.heightAnchor,
+                                        multiplier: multiplier,
+                                        constant: constant)
+		c.isActive = true
+		return c
+	}
+	
+	@discardableResult func height(_ constant: CGFloat) -> NSLayoutConstraint {
+		let c = heightAnchor.constraint(equalToConstant: constant)
+		c.isActive = true
+		return c
+	}
+	
+    @discardableResult func size(to other: LayoutAnchoring,
+                                 multiplier: CGFloat = 1,
+                                 constant: CGFloat = 0)
+        -> [NSLayoutConstraint]
+    {
 		return [width(to: other), height(to: other)]
 	}
 	
-	func center(to centers: LayoutAnchoring)
-		-> [NSLayoutConstraint]
+	@discardableResult func sized(_ size: CGSize) -> [NSLayoutConstraint] {
+		return [width(size.width), height(size.height)]
+	}
+
+	@discardableResult func centerX(to other: LayoutAnchoring)
+		-> NSLayoutConstraint
 	{
-		return [
-			centerXAnchor.constraint(equalTo: centers.centerX),
-			centerYAnchor.constraint(equalTo: centers.centerY)
-		]
+		let c = centerX.constraint(equalTo: other.centerX)
+		c.isActive = true
+		return c
+	}
+
+	@discardableResult func centerY(to other: LayoutAnchoring)
+		-> NSLayoutConstraint
+	{
+		let c = centerXAnchor.constraint(equalTo: other.centerX)
+		c.isActive = true
+		return c
 	}
 	
-	func top(to topTo: NSLayoutYAxisAnchor? = nil,
+	@discardableResult func center(to other: LayoutAnchoring)
+		-> [NSLayoutConstraint]
+	{
+		let constraints = [centerX(to: other), centerY(to: other)]
+		constraints.forEach { $0.isActive = true }
+		return constraints
+	}
+	
+	@discardableResult func top(to topTo: NSLayoutYAxisAnchor? = nil,
 			 leadingTo: NSLayoutXAxisAnchor? = nil,
 			 bottomTo: NSLayoutYAxisAnchor? = nil,
 			 trailingTo: NSLayoutXAxisAnchor? = nil)
@@ -182,6 +316,26 @@ public extension LayoutAnchoring {
 		
 		return constraints
 	}
+    
+    @discardableResult func vSpace(to other: LayoutAnchoring,
+                                   multiplier: CGFloat = 1,
+                                   constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+        return bottom(to: other.top)
+    }
+
+    @discardableResult func hSpace(to other: LayoutAnchoring,
+                                   multiplier: CGFloat = 1,
+                                   constant: CGFloat = 0)
+        -> NSLayoutConstraint
+    {
+        return trailing(to: other.leading, constant: constant)
+    }
+    
+    @discardableResult func square() -> NSLayoutConstraint {
+        return widthAnchor.constraint(equalTo: heightAnchor, multiplier: 1)
+    }
 }
 
 
@@ -195,28 +349,28 @@ public extension Array where Element == NSLayoutConstraint {
 		}
 	}
 	
-	func inset(by inset: UIEdgeInsets) -> Array {
+	@discardableResult func inset(by inset: UIEdgeInsets) -> Array {
 		return self + inset
 	}
 	
-	func inset(by amount: CGFloat) -> Array {
+	@discardableResult func inset(by amount: CGFloat) -> Array {
 		return self + [amount, amount, -amount, -amount]
 	}
 	
-	func offset(by amount: CGFloat) -> Array {
+	@discardableResult func offset(by amount: CGFloat) -> Array {
 		return self + amount
 	}
 }
 
-public func + (lhs: [NSLayoutConstraint], rhs: CGFloat) -> [NSLayoutConstraint] {
+@discardableResult public func + (lhs: [NSLayoutConstraint], rhs: CGFloat) -> [NSLayoutConstraint] {
 	return lhs + [CGFloat](repeating: rhs, count: lhs.count)
 }
 
-public func - (lhs: [NSLayoutConstraint], rhs: CGFloat) -> [NSLayoutConstraint] {
+@discardableResult public func - (lhs: [NSLayoutConstraint], rhs: CGFloat) -> [NSLayoutConstraint] {
 	return lhs + -rhs
 }
 
-public func + (lhs: [NSLayoutConstraint], rhs: [CGFloat]) -> [NSLayoutConstraint] {
+@discardableResult public func + (lhs: [NSLayoutConstraint], rhs: [CGFloat]) -> [NSLayoutConstraint] {
 	assert(lhs.count == rhs.count, "Error: The number of elements on the left side does not match the right side. \(lhs.count) vs \(rhs.count) items")
 	
 	return lhs.enumerated().map {
@@ -225,22 +379,22 @@ public func + (lhs: [NSLayoutConstraint], rhs: [CGFloat]) -> [NSLayoutConstraint
 	}
 }
 
-public func - (lhs: [NSLayoutConstraint], rhs: [CGFloat]) -> [NSLayoutConstraint] {
+@discardableResult public func - (lhs: [NSLayoutConstraint], rhs: [CGFloat]) -> [NSLayoutConstraint] {
 	return lhs + rhs.map { -$0 }
 }
 
-public func + (lhs: [NSLayoutConstraint], rhs: UIEdgeInsets) -> [NSLayoutConstraint] {
+@discardableResult public func + (lhs: [NSLayoutConstraint], rhs: UIEdgeInsets) -> [NSLayoutConstraint] {
 	return lhs + [rhs.top, rhs.left, rhs.bottom, rhs.right]
 }
 
-public func - (lhs: [NSLayoutConstraint], rhs: UIEdgeInsets) -> [NSLayoutConstraint] {
+@discardableResult public func - (lhs: [NSLayoutConstraint], rhs: UIEdgeInsets) -> [NSLayoutConstraint] {
 	return lhs + UIEdgeInsets(top: -rhs.top,
 							  left: -rhs.left,
 							  bottom: -rhs.bottom,
 							  right: -rhs.right)
 }
 
-public func * (lhs: [NSLayoutConstraint], rhs: [CGFloat]) -> [NSLayoutConstraint] {
+@discardableResult public func * (lhs: [NSLayoutConstraint], rhs: [CGFloat]) -> [NSLayoutConstraint] {
 	assert(lhs.count == rhs.count, "Error: The number of elements on the left side does not match the right side. \(lhs.count) vs \(rhs.count) items")
 	
 	return lhs.enumerated().map {
@@ -248,8 +402,20 @@ public func * (lhs: [NSLayoutConstraint], rhs: [CGFloat]) -> [NSLayoutConstraint
 	}
 }
 
-public func * (lhs: [NSLayoutConstraint], rhs: CGFloat) -> [NSLayoutConstraint] {
-	return lhs * [CGFloat](repeating: rhs, count: lhs.count)
+@discardableResult public func * (lhs: [NSLayoutConstraint], rhs: CGFloat) -> [NSLayoutConstraint] {
+    return lhs * [CGFloat](repeating: rhs, count: lhs.count)
+}
+
+@discardableResult public func + (lhs: NSLayoutConstraint, rhs: CGFloat) -> NSLayoutConstraint {
+    return ([lhs] + rhs).first!
+}
+
+@discardableResult public func - (lhs: NSLayoutConstraint, rhs: CGFloat) -> NSLayoutConstraint {
+    return ([lhs] - rhs).first!
+}
+
+@discardableResult public func * (lhs: NSLayoutConstraint, rhs: CGFloat) -> NSLayoutConstraint {
+    return ([lhs] * rhs).first!
 }
 
 public extension NSLayoutConstraint {
@@ -264,3 +430,130 @@ public extension NSLayoutConstraint {
 			constant: constant)
 	}
 }
+
+
+extension UILabel {
+    public convenience init(_ text: String? = nil, font: UIFont? = nil, alignment: NSTextAlignment? = nil) {
+		self.init()
+        
+        if let text = text {
+            self.text = text
+        }
+        
+        if let font = font {
+            self.font = font
+        }
+        
+        if let alignment = alignment {
+            self.textAlignment = alignment
+        }
+        
+		sizeToFit()
+	}
+}
+
+extension UIButton {
+    public convenience init(_ title: String? = nil, image: UIImage? = nil) {
+		self.init()
+        
+        if let title = title {
+            setTitle(title, for: .normal)
+        }
+        
+        if let image = image {
+            setImage(image, for: .normal)
+        }
+        
+		sizeToFit()
+	}
+}
+
+
+public func hStack(spacing: CGFloat? = nil,
+                   alignment: UIStackView.Alignment? = nil,
+                   distribution: UIStackView.Distribution? = nil,
+				   views: [UIView])
+    -> UIStackView
+{
+    return stack(axis: .horizontal,
+                 spacing: spacing,
+                 alignment: alignment,
+				 distribution: distribution,
+				 views: views)
+}
+
+public func vStack(spacing: CGFloat? = nil,
+                   alignment: UIStackView.Alignment? = nil,
+                   distribution: UIStackView.Distribution? = nil,
+				   views: [UIView])
+    -> UIStackView
+{
+	return stack(axis: .vertical,
+                 spacing: spacing,
+                 alignment: alignment,
+                 distribution: distribution,
+				 views: views)
+}
+
+public func stack(axis: NSLayoutConstraint.Axis = .vertical,
+                  spacing: CGFloat? = nil,
+                  alignment: UIStackView.Alignment? = nil,
+                  distribution: UIStackView.Distribution? = nil,
+				  views: [UIView])
+    -> UIStackView
+{
+    views.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+    let stack = UIStackView(arrangedSubviews: views)
+    stack.translatesAutoresizingMaskIntoConstraints = false
+    
+    stack.axis = axis
+
+    if let spacing = spacing {
+        stack.spacing = spacing
+    }
+    
+    if let alignment = alignment {
+        stack.alignment = alignment
+    }
+    
+    if let distribution = distribution {
+        stack.distribution = distribution
+    }
+    
+    return stack
+}
+@discardableResult public func equalWidths(_ views: [UIView])
+    -> [NSLayoutConstraint]
+{
+    
+    guard views.count > 1,
+        let first = views.first else {
+        return [] // nothing to set equal
+    }
+    
+    return views[1...].map {
+        $0.width(to: first)
+    }
+}
+
+@discardableResult public func equalHeights(_ views: [UIView])
+    -> [NSLayoutConstraint]
+{
+    
+    guard views.count > 1,
+        let first = views.first else {
+            return [] // nothing to set equal
+    }
+    
+    return views[1...].map {
+        $0.height(to: first)
+    }
+}
+
+
+@discardableResult public func equalSizes(_ views: [UIView])
+    -> [NSLayoutConstraint]
+{
+    return equalWidths(views) + equalHeights(views)
+}
+
