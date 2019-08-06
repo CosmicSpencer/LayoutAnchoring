@@ -254,6 +254,18 @@ public extension LayoutAnchoring {
 		return c
 	}
 	
+	@discardableResult func square() -> NSLayoutConstraint {
+		let c = NSLayoutConstraint(item: self,
+								   attribute: .height,
+								   relatedBy: .equal,
+								   toItem: self,
+								   attribute: .width,
+								   multiplier: 1,
+								   constant: 0)
+		c.isActive = true
+		return c
+	}
+	
     @discardableResult func size(to other: LayoutAnchoring,
                                  multiplier: CGFloat = 1,
                                  constant: CGFloat = 0)
@@ -277,7 +289,7 @@ public extension LayoutAnchoring {
 	@discardableResult func centerY(to other: LayoutAnchoring)
 		-> NSLayoutConstraint
 	{
-		let c = centerXAnchor.constraint(equalTo: other.centerX)
+		let c = centerY.constraint(equalTo: other.centerY)
 		c.isActive = true
 		return c
 	}
@@ -316,6 +328,15 @@ public extension LayoutAnchoring {
 		
 		return constraints
 	}
+	
+	@discardableResult func snapBottom(to other: LayoutAnchoring,
+									   inset: UIEdgeInsets = .zero)
+		-> [NSLayoutConstraint]
+	{
+		return [leading(to: other.leading, constant: inset.left),
+				bottom(to: other.bottom, constant: inset.bottom),
+				trailing(to: other.trailing, constant: inset.right)]
+	}
     
     @discardableResult func vSpace(to other: LayoutAnchoring,
                                    multiplier: CGFloat = 1,
@@ -331,10 +352,6 @@ public extension LayoutAnchoring {
         -> NSLayoutConstraint
     {
         return trailing(to: other.leading, constant: constant)
-    }
-    
-    @discardableResult func square() -> NSLayoutConstraint {
-        return widthAnchor.constraint(equalTo: heightAnchor, multiplier: 1)
     }
 }
 
@@ -469,37 +486,37 @@ extension UIButton {
 }
 
 
-public func hStack(spacing: CGFloat? = nil,
+public func hStack(views: [UIView],
+				   spacing: CGFloat? = nil,
                    alignment: UIStackView.Alignment? = nil,
-                   distribution: UIStackView.Distribution? = nil,
-				   views: [UIView])
+                   distribution: UIStackView.Distribution? = nil)
     -> UIStackView
 {
-    return stack(axis: .horizontal,
+    return stack(views: views,
+				 axis: .horizontal,
                  spacing: spacing,
                  alignment: alignment,
-				 distribution: distribution,
-				 views: views)
+				 distribution: distribution)
 }
 
-public func vStack(spacing: CGFloat? = nil,
+public func vStack(views: [UIView],
+				   spacing: CGFloat? = nil,
                    alignment: UIStackView.Alignment? = nil,
-                   distribution: UIStackView.Distribution? = nil,
-				   views: [UIView])
+                   distribution: UIStackView.Distribution? = nil)
     -> UIStackView
 {
-	return stack(axis: .vertical,
+	return stack(views: views,
+				 axis: .vertical,
                  spacing: spacing,
                  alignment: alignment,
-                 distribution: distribution,
-				 views: views)
+                 distribution: distribution)
 }
 
-public func stack(axis: NSLayoutConstraint.Axis = .vertical,
+public func stack(views: [UIView],
+				  axis: NSLayoutConstraint.Axis = .vertical,
                   spacing: CGFloat? = nil,
                   alignment: UIStackView.Alignment? = nil,
-                  distribution: UIStackView.Distribution? = nil,
-				  views: [UIView])
+                  distribution: UIStackView.Distribution? = nil)
     -> UIStackView
 {
     views.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
