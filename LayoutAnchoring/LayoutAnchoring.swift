@@ -328,7 +328,16 @@ public extension LayoutAnchoring {
 		
 		return constraints
 	}
-	
+
+	@discardableResult func snapTop(to other: LayoutAnchoring,
+									   inset: UIEdgeInsets = .zero)
+		-> [NSLayoutConstraint]
+	{
+		return [leading(to: other.leading, constant: inset.left),
+				top(to: other.top, constant: inset.top),
+				trailing(to: other.trailing, constant: inset.right)]
+	}
+
 	@discardableResult func snapBottom(to other: LayoutAnchoring,
 									   inset: UIEdgeInsets = .zero)
 		-> [NSLayoutConstraint]
@@ -450,7 +459,7 @@ public extension NSLayoutConstraint {
 
 
 extension UILabel {
-    public convenience init(_ text: String? = nil, font: UIFont? = nil, alignment: NSTextAlignment? = nil) {
+	public convenience init(_ text: String? = nil, font: UIFont? = nil, alignment: NSTextAlignment? = nil, textColor: UIColor? = nil) {
 		self.init()
         
         if let text = text {
@@ -464,13 +473,17 @@ extension UILabel {
         if let alignment = alignment {
             self.textAlignment = alignment
         }
+		
+		if let color = textColor {
+			self.textColor = color
+		}
         
 		sizeToFit()
 	}
 }
 
 extension UIButton {
-    public convenience init(_ title: String? = nil, image: UIImage? = nil) {
+    public convenience init(_ title: String? = nil, image: UIImage? = nil, font: UIFont? = nil, textColor: UIColor? = nil) {
 		self.init()
         
         if let title = title {
@@ -480,7 +493,15 @@ extension UIButton {
         if let image = image {
             setImage(image, for: .normal)
         }
-        
+		
+		if let font = font {
+			titleLabel?.font = font
+		}
+		
+		if let textColor = textColor {
+			setTitleColor(textColor, for: .normal)
+		}
+		
 		sizeToFit()
 	}
 }
@@ -574,3 +595,28 @@ public func stack(views: [UIView],
     return equalWidths(views) + equalHeights(views)
 }
 
+
+
+public class Space: UIView {
+	override init(frame: CGRect) {
+		super.init(frame: .zero)
+	}
+	
+	public convenience init(width: CGFloat? = nil, height: CGFloat? = nil) {
+		self.init(frame: .zero)
+		
+		translatesAutoresizingMaskIntoConstraints = false
+		
+		if let width = width {
+			self.width(width)
+		}
+		
+		if let height = height {
+			self.height(height)
+		}
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+}
