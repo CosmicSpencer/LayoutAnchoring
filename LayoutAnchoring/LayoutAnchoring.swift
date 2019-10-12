@@ -208,7 +208,7 @@ public extension LayoutAnchoring {
 									  inset: UIEdgeInsets = .zero)
 		-> [NSLayoutConstraint]
 	{
-		return [leading(to: other, constant: inset.top), trailing(to: other, constant: inset.bottom)]
+		return [leading(to: other, constant: inset.left), trailing(to: other, constant: inset.right)]
 	}
 
     @discardableResult func fit(to other: LayoutAnchoring,
@@ -278,26 +278,27 @@ public extension LayoutAnchoring {
 		return [width(size.width), height(size.height)]
 	}
 
-	@discardableResult func centerX(to other: LayoutAnchoring)
+	@discardableResult func centerX(to other: LayoutAnchoring, constant: CGFloat = 0)
 		-> NSLayoutConstraint
 	{
-		let c = centerX.constraint(equalTo: other.centerX)
+		let c = centerX.constraint(equalTo: other.centerX, constant: constant)
 		c.isActive = true
 		return c
 	}
 
-	@discardableResult func centerY(to other: LayoutAnchoring)
+	@discardableResult func centerY(to other: LayoutAnchoring, constant: CGFloat = 0)
 		-> NSLayoutConstraint
 	{
-		let c = centerY.constraint(equalTo: other.centerY)
+		let c = centerY.constraint(equalTo: other.centerY, constant: constant)
 		c.isActive = true
 		return c
 	}
 	
-	@discardableResult func center(to other: LayoutAnchoring)
+	@discardableResult func center(to other: LayoutAnchoring, constant: CGPoint = .zero)
 		-> [NSLayoutConstraint]
 	{
-		let constraints = [centerX(to: other), centerY(to: other)]
+		let constraints = [centerX(to: other, constant: constant.x),
+						   centerY(to: other, constant: constant.y)]
 		constraints.forEach { $0.isActive = true }
 		return constraints
 	}
@@ -352,7 +353,7 @@ public extension LayoutAnchoring {
                                    constant: CGFloat = 0)
         -> NSLayoutConstraint
     {
-        return bottom(to: other.top)
+		return bottom(to: other.top, constant: constant)
     }
 
     @discardableResult func hSpace(to other: LayoutAnchoring,
@@ -614,6 +615,23 @@ public class Space: UIView {
 		if let height = height {
 			self.height(height)
 		}
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+}
+
+
+public class FlexibleSpace: UIView {
+	public convenience init() {
+		self.init(frame: .zero)
+		translatesAutoresizingMaskIntoConstraints = false
+	}
+	
+	public override init(frame: CGRect) {
+		super.init(frame: frame)
+		
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
