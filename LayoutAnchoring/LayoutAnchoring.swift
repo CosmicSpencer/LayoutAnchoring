@@ -638,3 +638,22 @@ public class FlexibleSpace: UIView {
 		fatalError("init(coder:) has not been implemented")
 	}
 }
+
+public class PaddingView: UIView {
+	public convenience init(_ view: UIView, inset insets: UIEdgeInsets) {
+		self.init(frame: .zero)
+		
+		translatesAutoresizingMaskIntoConstraints = false
+		view.translatesAutoresizingMaskIntoConstraints = false
+		addSubview(view)
+		view.fit(to: self, inset: insets)
+	}
+
+	public override init(frame: CGRect) {
+		super.init(frame: frame)
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+}
